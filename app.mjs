@@ -120,13 +120,22 @@ document.getElementById("addGameForm").addEventListener("submit", e => {
     const formData = new FormData(form);
 
     const newGameData = Object.fromEntries(formData.entries());
+
     newGameData.year = parseInt(newGameData.year);
     newGameData.playCount = parseInt(newGameData.playCount);
     newGameData.personalRating = parseInt(newGameData.personalRating);
 
+    // Check for Duplicates
+    if (games.some(g => g.title === newGameData.title)) {
+        alert("A game with this title already exists.");
+        return;
+    }
+
     const newGame = new Game(newGameData);
+
     saveGame(newGame);
-    games = getAllGames();
+    games.push(newGame);
+
     renderGames();
     bindUIEvents();
 
