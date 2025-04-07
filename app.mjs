@@ -110,7 +110,28 @@ function bindUIEvents() {
     });
 }
 
+document.querySelector("input[name='personalRating']").addEventListener("input", e => {
+    document.getElementById("ratingPreview").textContent = e.target.value;
+});
+
+document.getElementById("addGameForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const newGameData = Object.fromEntries(formData.entries());
+    newGameData.year = parseInt(newGameData.year);
+    newGameData.playCount = parseInt(newGameData.playCount);
+    newGameData.personalRating = parseInt(newGameData.personalRating);
+
+    const newGame = new Game(newGameData);
+    saveGame(newGame);
+    games = getAllGames();
+    renderGames();
+    bindUIEvents();
+
+    form.reset()
+    document.getElementById("ratingPreview").textContent = "5";
+});
 
 
-renderGames();
-bindUIEvents();
