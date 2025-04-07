@@ -1,6 +1,7 @@
 import Game from "./models/Game.mjs";
 
 const GAME_PREFIX = "game_"
+let games = [];
 
 function saveGame(game) {
     const key = `${GAME_PREFIX}${game.title}`;
@@ -8,15 +9,15 @@ function saveGame(game) {
 }
 
 function getAllGames() {
-    const games = [];
+    const result = [];
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key.startsWith(GAME_PREFIX)) {
             const data = JSON.parse(localStorage.getItem(key));
-            games.push(new Game(data));
+            result.push(new Game(data));
         }
     }
-    return games;
+    return result;
 }
 
 function exportGamesAsJSON() {
@@ -32,5 +33,28 @@ function importGamesFromJSON(jsonStr) {
         const game = new Game(obj);
         saveGame(game);
     });
+
+    games = getAllGames();
 }
+
+games = getAllGames();
+console.log("Loaded Games:", games);
+
+document.getElementById("importSource").addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = event => {
+        try {
+            importGamesFromJSON(event.target.result);
+            console.log("Import Verified: ", games);
+        } catch (err) {
+            console.error("Failed", err);
+        }
+    };
+    reader.readAsText(file);
+})
+
+
 
