@@ -56,5 +56,30 @@ document.getElementById("importSource").addEventListener("change", e => {
     reader.readAsText(file);
 })
 
+function renderGames() {
+    const container = document.getElementById("gameList");
+    container.innerHTML = "";
 
+    games.forEach(game => {
+        const gameDiv = document.createElement("div");
+        gameDiv.classList.add("game-record");
+
+        gameDiv.innerHTML = `
+        <h2>${game.title}</h2>
+        <p><strong>Year:</strong> ${game.year}</p>
+        <p><strong>Designer:</strong> ${game.designer}</p>
+        <p><strong>Play Count:</strong> ${game.playCount}</p>
+        <p><strong>Rating:</strong>
+            <input type="range" min="0" max="10" value="${game.personalRating}" disabled>
+            <span>${game.personalRating}</span> 
+        </p>
+        <button disabled>Delete</button>
+        <hr />
+    `;
+
+    container.appendChild(gameDiv);
+    });
+}
+
+renderGames();
 
