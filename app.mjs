@@ -68,10 +68,12 @@ function renderGames() {
         <h2>${game.title}</h2>
         <p><strong>Year:</strong> ${game.year}</p>
         <p><strong>Designer:</strong> ${game.designer}</p>
-        <p><strong>Play Count:</strong> ${game.playCount}</p>
+        <p><strong>Play Count:</strong> 
+        <input type="number" class="playCountInput" min="0" value="${game.playCount}" data-title="${game.title}">
+        </p>
         <p><strong>Rating:</strong>
-            <input type="range" min="0" max="10" value="${game.personalRating}" disabled>
-            <span>${game.personalRating}</span> 
+            <input type="range" min="0" max="10" value="${game.personalRating}" class="ratingSlider" data-title="${game.title}">
+            <span class="ratingValue">${game.personalRating}</span> 
         </p>
         <button disabled>Delete</button>
         <hr />
@@ -81,5 +83,34 @@ function renderGames() {
     });
 }
 
-renderGames();
+function bindUIEvents() {
+    document.querySelectorAll(".ratingSlider").forEach(slider => {
+        slider.addEventListener("input", (e) => {
+            const title = e.target.dataset.title;
+            const newRating = parseInt(e.target.value);
+            const game = games.find(g => g.title === title);
+            if (game) {
+                game.personalRating = newRating;
+                saveGame(game);
+                e.target.nextElementSibling.textContent = newRating;
+            }
+        });
+    });
 
+    document.querySelectorAll(".playCountInput").forEach(input => {
+        input.addEventListener("input", (e) => {
+            const title = e.target.dataset.title;
+            const newCount = parseInt(e.target.value);
+            const game = games.find(g => g.title === title);
+            if (game) {
+                game.playCount = newCount;
+                saveGame(game);
+            }
+        });
+    });
+}
+
+
+
+renderGames();
+bindUIEvents();
