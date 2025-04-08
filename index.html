@@ -7,24 +7,26 @@
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
+        <div class="container">
         <h1>GameRecord Library</h1>
-
         <input type="file" id="importSource" accept=".json">
-        
-        <h2>Add New Game</h2>
-        <form id="addGameForm">
-            <input type="text" name="title" placeholder="Title" required />
-            <input type="text" name="designer" placeholder="Designer" required />
-            <input type="text" name="artist" placeholder="Artist" required />
-            <input type="text" name="publisher" placeholder="Publisher" required />
-            <input type="number" name="year" placeholder="Year" required />
-            <input type="text" name="players" placeholder="Players (e.g. 2-4)" required />
-            <input type="text" name="time" placeholder="Time (e.g. 60min)" required />
-            <input type="text" name="difficulty" placeholder="Difficulty" required />
-            <input type="url" name="url" placeholder="BoardGameGeek URL" required />
-            <input type="number" name="playCount" placeholder="Play Count" required />
-            <input type="range" name="personalRating" min="0" max="10" value="5"/>
-            <span id="ratingPreview">5</span>/10
+
+        <div class="layout">
+            <div class="left-panel">
+                <h2>Add New Game</h2>
+                <form id="addGameForm">
+                    <input type="text" name="title" placeholder="Title" required />
+                    <input type="text" name="designer" placeholder="Designer" required />
+                    <input type="text" name="artist" placeholder="Artist" required />
+                    <input type="text" name="publisher" placeholder="Publisher" required />
+                    <input type="number" name="year" placeholder="Year" required />
+                    <input type="text" name="players" placeholder="Players (e.g. 2-4)" required />
+                    <input type="text" name="time" placeholder="Time (e.g. 60min)" required />
+                    <input type="text" name="difficulty" placeholder="Difficulty" required />
+                    <input type="url" name="url" placeholder="BoardGameGeek URL" required />
+                    <input type="number" name="playCount" placeholder="Play Count" required />
+                    <input type="range" name="personalRating" min="0" max="10" value="5"/>
+                <span id="ratingPreview">5</span>/10
             <button type="submit">Add Game</button>
         </form>
 
@@ -37,9 +39,15 @@
             <option value="playCount">Play Count</option>
         </select>
 
+
         <button id="exportBtn">Export Library as JSON</button>
-        <div id="gameList"></div>
-    
-        <script type="module" src="app.mjs"></script>
+    </div>
+        <div class="right-panel">
+            <h2>Your Game Library</h2>
+            <div id="gameList"></div>
+        </div>
+    </div>
+    </div>
+    <script type="module" src="app.mjs"></script>
     </body>
 </html>
