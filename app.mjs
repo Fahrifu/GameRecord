@@ -2,6 +2,7 @@ import Game from "./models/Game.mjs";
 
 const GAME_PREFIX = "game_"
 let games = [];
+let sortKey = "";
 
 function saveGame(game) {
     const key = `${GAME_PREFIX}${game.title}`;
@@ -65,7 +66,9 @@ function renderGames() {
     const container = document.getElementById("gameList");
     container.innerHTML = "";
 
-    games.forEach(game => {
+    [...games]
+    .sort((a, b) => sortGamesBy(a, b, sortKey))
+    .forEach(game => {
         const gameDiv = document.createElement("div");
         gameDiv.classList.add("game-record");
 
@@ -86,6 +89,22 @@ function renderGames() {
 
     container.appendChild(gameDiv);
     });
+}
+
+function sortGamesBy(a, b, key) {
+    if (!key) return 0;
+
+    if (key === "players") {
+        const getMin = str => parseInt(str);
+        return getMin(a.players) - getMin(b.players);
+    }
+
+    if (key === "difficulty") {
+        const scale = { Light: 1, "Medium": 2, "Medium-Heavy": 3, Heavy: 4};
+        return (scale[a.difficulty] || 0) - (scale[b.difficulty] || 0);
+    }
+
+    return (a[key] || 0) - (b[key] || 0);
 }
 
 function bindUIEvents() {
@@ -159,4 +178,12 @@ document.getElementById("addGameForm").addEventListener("submit", e => {
     document.getElementById("ratingPreview").textContent = "5";
 });
 
+document.getElementById("sortGames").addEventListener("change", (e) => {
+    sortKey = e.target.value;
+    renderGames();
+    bindUIEvents();
+});
 
+
+renderGames();
+bindUIEvents();

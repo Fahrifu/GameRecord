@@ -7,6 +7,10 @@
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
+        <h1>GameRecord Library</h1>
+
+        <input type="file" id="importSource" accept=".json">
+        
         <h2>Add New Game</h2>
         <form id="addGameForm">
             <input type="text" name="title" placeholder="Title" required />
@@ -23,10 +27,19 @@
             <span id="ratingPreview">5</span>/10
             <button type="submit">Add Game</button>
         </form>
+
+        <h3>Sort Games by:</h3>
+        <select id="sortGames">
+            <option value="">-- Choose --</option>
+            <option value="players">Player Count</option>
+            <option value="personalRating">Rating</option>
+            <option value="difficulty">Difficulty</option>
+            <option value="playCount">Play Count</option>
+        </select>
+
+
         <div id="gameList"></div>
-        <h1></h1>
-        <input type="file" id="importSource" accept=".json">
     
-        <script src="app.mjs"></script>
+        <script type="module" src="app.mjs"></script>
     </body>
 </html>
