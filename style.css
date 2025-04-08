@@ -1,7 +1,84 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Georgia', serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #fdf6e3;
+    color: #3e3e3e;
+    padding: 2rem;
+    max-width: 800px;
+    margin: auto;
+}
+
+h1, h2, h3 {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    color: #4b3b2a;
+    margin-bottom: 0.5rem;
+}
+
 .game-record {
-    background: white;
+    background: #fffaf0;
+    border: 1px solid #d4c4a8;
     padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+form {
+    margin-bottom: 2rem;
+    background: #fffaf5;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #d8cabf
+}
+
+input[type="text"],
+input[type="url"],
+input[type="number"],
+input[type="range"],
+select {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border: 1px solid #cbdfa3;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 1rem;
+}
+
+input[type="range"] {
+    padding: 0;
+}
+
+button {
+    background-color: #7c5c3f;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button:hover {
+    background-color: #a67c52;
+}
+
+#gameList {
+    margin-top: 2rem;
+}
+
+hr {
+    margin: 1rem 0;
+    border: none;
+    border-bottom: 1px solid #e1d4bc;
+}
+
+span.ratingValue {
+    font-weight: bold;
 }

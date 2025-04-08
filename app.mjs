@@ -1,9 +1,12 @@
-import { render } from "express/lib/response";
 import Game from "./models/Game.mjs";
 
 const GAME_PREFIX = "game_"
-let games = [];
 let sortKey = "";
+
+
+let games = getAllGames();
+renderGames();
+bindUIEvents();
 
 function saveGame(game) {
     const key = `${GAME_PREFIX}${game.title}`;
@@ -25,11 +28,6 @@ function getAllGames() {
 function deleteGame(title) {
     localStorage.removeItem(`${GAME_PREFIX}${title}`);
     games = games.filter(g => g.title !== title);
-}
-
-function exportGamesAsJSON() {
-    const games = getAllGames();
-    return JSON.parse(games, null, 2);
 }
 
 function importGamesFromJSON(jsonStr) {
@@ -56,6 +54,8 @@ document.getElementById("importSource").addEventListener("change", e => {
         try {
             importGamesFromJSON(event.target.result);
             console.log("Import Verified: ", games);
+            renderGames();
+            bindUIEvents();
         } catch (err) {
             console.error("Failed", err);
         }
@@ -126,7 +126,7 @@ function enableEditMode(title) {
         document.getElementById("editRatingPreview").textContent = e.target.value;
     });
 
-    document.getElementById("cancelEdits").addEventListener("click", () => {
+    document.getElementById("cancelEdit").addEventListener("click", () => {
         renderGames();
         bindUIEvents();
     });
@@ -255,5 +255,17 @@ document.getElementById("sortGames").addEventListener("change", (e) => {
 });
 
 
-renderGames();
-bindUIEvents();
+document.getElementById("exportBtn").addEventListener("click", () => {
+    const allGames = getAllGames();
+    const json = JSON.stringify(allGames, null, 2);
+
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "GameRecord.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+})
