@@ -1,3 +1,4 @@
+import { render } from "express/lib/response";
 import Game from "./models/Game.mjs";
 
 const GAME_PREFIX = "game_"
@@ -83,11 +84,73 @@ function renderGames() {
             <input type="range" min="0" max="10" value="${game.personalRating}" class="ratingSlider" data-title="${game.title}">
             <span class="ratingValue">${game.personalRating}</span> 
         </p>
+        <button class="editBtn" data-title="${game.title}">Edit</button>
         <button class="deleteBtn" data-title="${game.title}">Delete</button>
         <hr />
     `;
 
     container.appendChild(gameDiv);
+    });
+}
+
+function enableEditMode(title) {
+    const game = games.find(g => g.title === title);
+    if (!game) return;
+
+    const container = document.getElementById("gameList");
+    const editForm = document.createElement("form");
+    editForm.classList.add("editForm");
+
+    editForm.innerHTML = `
+    <h2>Edit: ${game.title}</h2>
+    <input type="text" name="designer" value="${game.designer}" required />
+    <input type="text" name="artist" value="${game.artist}" required />
+    <input type="text" name="publisher" value="${game.publisher}" required />
+    <input type="number" name="year" value="${game.year}" required />
+    <input type="text" name="players" value="${game.players}" required />
+    <input type="text" name="time" value="${game.time}" required />
+    <input type="text" name="difficulty" value="${game.difficulty}" required />
+    <input type="url" name="url" value="${game.url}" required />
+    <input type="number" name="playCount" value="${game.playCount}" required />
+    <input type="range" name="personalRating" min="0" max="10" value="${game.personalRating}" />
+    <span id="editRatingPreview">${game.personalRating}</span>/10
+    <br />
+    <button type="submit">Save</button>
+    <button type="button" id="cancelEdit">Cancel</button>
+    `;
+
+    container.innerHTML = "";
+    container.appendChild(editForm);
+
+    editForm.personalRating.addEventListener("input", e => {
+        document.getElementById("editRatingPreview").textContent = e.target.value;
+    });
+
+    document.getElementById("cancelEdits").addEventListener("click", () => {
+        renderGames();
+        bindUIEvents();
+    });
+
+    editForm.addEventListener("submit", e => {
+        e.preventDefault();
+        const formData = new FormData(editForm);
+        const updatedData = Object.fromEntries(formData.entries());
+
+        game.designer = updatedData.designer;
+        game.artist = updatedData.artist;
+        game.publisher = updatedData.publisher;
+        game.year = parseInt(updatedData.year);
+        game.players = updatedData.players;
+        game.time = updatedData.time;
+        game.difficulty = updatedData.difficulty;
+        game.url = updatedData.url;
+        game.playCount = parseInt(updatedData.playCount);
+        game.personalRating = parseInt(updatedData.personalRating);
+
+        saveGame(game);
+        renderGames();
+        bindUIEvents;
+
     });
 }
 
@@ -141,6 +204,13 @@ function bindUIEvents() {
                 renderGames();
                 bindUIEvents();
             }
+        });
+    });
+
+    document.querySelectorAll(".editBtn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const title = e.target.dataset.title;
+            enableEditMode(title);
         });
     });
 }
