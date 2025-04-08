@@ -20,6 +20,11 @@ function getAllGames() {
     return result;
 }
 
+function deleteGame(title) {
+    localStorage.removeItem(`${GAME_PREFIX}${title}`);
+    games = games.filter(g => g.title !== title);
+}
+
 function exportGamesAsJSON() {
     const games = getAllGames();
     return JSON.parse(games, null, 2);
@@ -75,7 +80,7 @@ function renderGames() {
             <input type="range" min="0" max="10" value="${game.personalRating}" class="ratingSlider" data-title="${game.title}">
             <span class="ratingValue">${game.personalRating}</span> 
         </p>
-        <button disabled>Delete</button>
+        <button class="deleteBtn" data-title="${game.title}">Delete</button>
         <hr />
     `;
 
@@ -105,6 +110,17 @@ function bindUIEvents() {
             if (game) {
                 game.playCount = newCount;
                 saveGame(game);
+            }
+        });
+    });
+
+    document.querySelectorAll(".deleteBtn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const title = e.target.dataset.title;
+            if (confirm(`Delete: "${title}" from your collection?`)) {
+                deleteGame(title);
+                renderGames();
+                bindUIEvents();
             }
         });
     });
